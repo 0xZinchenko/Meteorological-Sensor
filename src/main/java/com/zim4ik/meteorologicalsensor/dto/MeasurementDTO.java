@@ -1,16 +1,14 @@
 package com.zim4ik.meteorologicalsensor.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
 public class MeasurementDTO {
 
     @NotNull(message = "Value cannot be null")
-    @Min(-100)
-    @Max(100)
+    @DecimalMin("-100.0")
+    @DecimalMax("100.0")
     private Double value;
 
     @NotNull(message = "Raining cannot be null")
