@@ -27,7 +27,7 @@ public class MeasurementService {
 
     @Transactional
     public void addMeasurement(MeasurementDTO dto) {
-        Sensor sensor = sensorRepository.findByName(dto.getSensorName()).orElseThrow(() -> new IllegalArgumentException());
+        Sensor sensor = sensorRepository.findByName(dto.getSensorName()).orElseThrow(() -> new IllegalArgumentException("Сенсор с именем %s не существует".formatted(dto.getSensorName())));
 
         Measurement measurement = new Measurement();
         measurement.setValue(dto.getValue());

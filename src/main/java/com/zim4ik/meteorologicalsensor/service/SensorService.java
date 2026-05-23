@@ -23,7 +23,7 @@ public class SensorService {
     public void registerSensor(SensorDTO dto) {
         Optional<Sensor> sensorOptional = sensorRepository.findByName(dto.getName());
         if (sensorOptional.isPresent()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Сенсор с именем %s уже существует".formatted(dto.getName()));
         }
         Sensor sensor = new Sensor();
         sensor.setName(dto.getName());

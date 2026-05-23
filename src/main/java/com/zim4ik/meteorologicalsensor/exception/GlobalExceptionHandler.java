@@ -3,17 +3,17 @@ package com.zim4ik.meteorologicalsensor.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
-public class ExceptionHandler {
+public class GlobalExceptionHandler {
 
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
 
         StringBuilder errorMessage = new StringBuilder();
@@ -32,7 +32,7 @@ public class ExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleBusinessError(IllegalArgumentException ex) {
 
         Map<String, String> error = new HashMap<>();

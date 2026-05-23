@@ -21,7 +21,7 @@ public class MeasurementController {
         this.measurementService = measurementService;
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Void> add(@RequestBody @Valid MeasurementDTO dto) {
         measurementService.addMeasurement(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
