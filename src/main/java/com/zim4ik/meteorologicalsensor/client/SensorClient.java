@@ -12,6 +12,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -35,6 +36,8 @@ public class SensorClient {
             System.out.println("Sensor registered successfully");
         } catch (HttpStatusCodeException e) {
             System.out.println(e.getStatusCode() + " " + e.getResponseBodyAsString());
+        } catch (ResourceAccessException e) {
+            System.out.println("Failed to reach server for registration: " + e.getMessage());
         }
 
         int successfulRequests = 0;
@@ -49,7 +52,7 @@ public class SensorClient {
                 measurementDTO.setSensorName(dto.getName());
                 restTemplate.postForEntity(BASE_URL + MEASUREMENT_ENDPOINT, measurementDTO, Void.class);
                 successfulRequests++;
-            } catch (HttpStatusCodeException e) {
+            } catch (HttpStatusCodeException | ResourceAccessException e) {
                 failedRequests++;
             }
             if ((i + 1) % 100 == 0) {
@@ -75,7 +78,7 @@ public class SensorClient {
                     new ParameterizedTypeReference<List<MeasurementDTO>>() {}
             );
             List<MeasurementDTO> measurements = response.getBody();
-            System.out.println("Получено измерений: " + (measurements != null ? measurements.size() : 0));
+            System.out.println("Measurements received: " + (measurements != null ? measurements.size() : 0));
 
             if (measurements != null && !measurements.isEmpty()) {
                 List<Double> xData = new ArrayList<>();
@@ -87,13 +90,17 @@ public class SensorClient {
 
                 XYChart chart = new XYChartBuilder().width(800).height(600).title("Temperature").xAxisTitle("Index").yAxisTitle("°C").build();
                 chart.addSeries("Temperature", xData, yData);
-                new SwingWrapper<>(chart).displayChart();
+                try {
+                    new SwingWrapper<>(chart).displayChart();
+                } catch (HeadlessException e) {
+                    System.out.println("Skipping chart display: no graphical display available");
+                }
             } else {
-                System.out.println("Нет данных для построения графика");
+                System.out.println("No data available to build chart");
             }
 
         } catch (HttpStatusCodeException | ResourceAccessException e) {
-            System.out.println("Ошибка при получении данных: " + e.getMessage());
+            System.out.println("Error fetching measurements: " + e.getMessage());
         }
 
     }

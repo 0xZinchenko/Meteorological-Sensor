@@ -64,11 +64,12 @@
             <scope>test</scope>
         </dependency>
         <!-- Source: https://mvnrepository.com/artifact/org.knowm.xchart/xchart -->
+        <!-- Only used by the standalone SensorClient load-test tool, not by the server itself -->
         <dependency>
             <groupId>org.knowm.xchart</groupId>
             <artifactId>xchart</artifactId>
             <version>4.0.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
