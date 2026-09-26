@@ -73,6 +73,18 @@ Responsible for:
 
 ---
 
+## ⚙️ Configuration
+
+Database connection settings can be overridden via environment variables (defaults are for local development):
+
+| Variable      | Default                                              |
+|---------------|-------------------------------------------------------|
+| `DB_URL`      | `jdbc:postgresql://localhost:5432/meteorological_sensor` |
+| `DB_USERNAME` | `postgres`                                            |
+| `DB_PASSWORD` | `postgres`                                            |
+
+---
+
 ## 🗄️ Database Schema
 
 ### Sensor
