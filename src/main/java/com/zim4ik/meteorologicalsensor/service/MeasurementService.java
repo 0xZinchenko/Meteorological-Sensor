@@ -34,7 +34,7 @@ public class MeasurementService {
         Sensor sensor = sensorRepository.findByName(dto.getSensorName())
                 .orElseThrow(() -> {
                     log.warn("Measurement rejected: sensor '{}' does not exist", dto.getSensorName());
-                    return new IllegalArgumentException("Сенсор с именем %s не существует".formatted(dto.getSensorName()));
+                    return new IllegalArgumentException("Sensor with name %s does not exist".formatted(dto.getSensorName()));
                 });
 
         Measurement measurement = new Measurement();
