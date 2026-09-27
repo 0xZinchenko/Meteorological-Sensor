@@ -17,6 +17,28 @@ A built-in client application:
 
 ---
 
+## 🚀 Quick Start
+
+**Prerequisites:** Java 17+, Maven, a running PostgreSQL instance.
+
+```bash
+# 1. Create the database
+createdb meteorological_sensor
+# (or manually: CREATE DATABASE meteorological_sensor;)
+
+# 2. Run the backend (uses localhost:5432/postgres/postgres by default,
+#    override with DB_URL / DB_USERNAME / DB_PASSWORD env vars if needed)
+./mvnw spring-boot:run
+
+# 3. Open the interactive API docs
+open http://localhost:8080/swagger-ui.html
+
+# 4. (Optional) Run the load-test client against the running backend
+#    (run SensorClient's main method from your IDE, or build the jar and run it with java -cp)
+```
+
+---
+
 ## 🧱 Architecture
 
 The project consists of two main components:
@@ -40,7 +62,7 @@ Responsible for:
 
 ## ⚙️ Tech Stack
 
-- Java 21
+- Java 17
 - Spring Boot
 - Spring Web (REST)
 - Spring Data JPA (Hibernate)
@@ -48,10 +70,15 @@ Responsible for:
 - RestTemplate (HTTP client)
 - XChart (data visualization)
 - Jakarta Validation API
+- springdoc-openapi (Swagger UI)
 
 ---
 
 ## 📡 REST API
+
+Interactive documentation (Swagger UI) is available once the backend is running at:
+`http://localhost:8080/swagger-ui.html`
+(raw OpenAPI spec at `http://localhost:8080/v3/api-docs`)
 
 ### Sensor Controller
 
