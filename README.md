@@ -1,5 +1,7 @@
 # 🌦 Meteorological Sensor System
 
+[![CI](https://github.com/0xZinchenko/Meteorological-Sensor/actions/workflows/ci.yml/badge.svg)](https://github.com/0xZinchenko/Meteorological-Sensor/actions/workflows/ci.yml)
+
 A REST-based weather data platform built with Spring Boot that simulates IoT sensors sending environmental measurements to a backend system. The project includes a load-testing client and data visualization module.
 
 ---
