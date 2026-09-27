@@ -70,7 +70,6 @@ public class SensorClient {
         System.out.println("Failed: " + failedRequests);
         System.out.println("Success rate: " + (successfulRequests * 100.0 / TOTAL_REQUESTS) + "%");
 
-        // GET /measurements (paginated; request a single page large enough to cover TOTAL_REQUESTS)
         try {
             ResponseEntity<MeasurementPage> response = restTemplate.exchange(
                     BASE_URL + GET_MEASUREMENTS_ENDPOINT + "?size=" + TOTAL_REQUESTS,

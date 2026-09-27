@@ -87,6 +87,9 @@ Interactive documentation (Swagger UI) is available once the backend is running 
 - `POST /sensors/registration`  
   Registers a new sensor (sensor name must be unique)
 
+- `GET /sensors`  
+  Returns all registered sensors
+
 ---
 
 ### Measurement Controller

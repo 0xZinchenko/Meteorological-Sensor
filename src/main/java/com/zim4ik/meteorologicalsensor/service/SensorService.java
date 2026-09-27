@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,5 +35,15 @@ public class SensorService {
         sensor.setName(dto.getName());
         sensorRepository.save(sensor);
         log.info("Sensor '{}' registered", dto.getName());
+    }
+
+    public List<SensorDTO> getAllSensors() {
+        return sensorRepository.findAll().stream()
+                .map(sensor -> {
+                    SensorDTO dto = new SensorDTO();
+                    dto.setName(sensor.getName());
+                    return dto;
+                })
+                .toList();
     }
 }
