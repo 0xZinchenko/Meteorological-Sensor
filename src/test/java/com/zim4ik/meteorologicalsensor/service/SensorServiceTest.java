@@ -44,6 +44,18 @@ class SensorServiceTest {
     }
 
     @Test
+    void registerSensor_propagatesDataIntegrityViolation_onConcurrentDuplicateInsert() {
+        SensorDTO dto = new SensorDTO();
+        dto.setName("MySensor-1");
+        when(sensorRepository.findByName("MySensor-1")).thenReturn(Optional.empty());
+        when(sensorRepository.save(org.mockito.ArgumentMatchers.any()))
+                .thenThrow(new org.springframework.dao.DataIntegrityViolationException("duplicate key"));
+
+        assertThatThrownBy(() -> sensorService.registerSensor(dto))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+
+    @Test
     void registerSensor_throws_whenNameAlreadyExists() {
         SensorDTO dto = new SensorDTO();
         dto.setName("MySensor-1");
