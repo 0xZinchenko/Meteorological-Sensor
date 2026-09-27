@@ -73,6 +73,7 @@ Responsible for:
 - XChart (data visualization)
 - Jakarta Validation API
 - springdoc-openapi (Swagger UI)
+- Spring Boot Actuator (health checks & metrics)
 
 ---
 
@@ -81,6 +82,17 @@ Responsible for:
 Interactive documentation (Swagger UI) is available once the backend is running at:
 `http://localhost:8080/swagger-ui.html`
 (raw OpenAPI spec at `http://localhost:8080/v3/api-docs`)
+
+### Actuator
+
+- `GET /actuator/health`  
+  Application health status (e.g. database connectivity)
+
+- `GET /actuator/metrics`  
+  Available application metrics
+
+- `GET /actuator/info`  
+  Application build/info metadata
 
 ### Sensor Controller
 
