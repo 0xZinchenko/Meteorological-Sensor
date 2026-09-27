@@ -11,6 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,12 +80,14 @@ class MeasurementServiceTest {
         measurement.setRaining(false);
         measurement.setSensor(sensor);
         measurement.prePersist();
-        when(measurementRepository.findAll()).thenReturn(List.of(measurement));
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<Measurement> page = new PageImpl<>(List.of(measurement), pageable, 1);
+        when(measurementRepository.findAll(pageable)).thenReturn(page);
 
-        List<MeasurementDTO> result = measurementService.getAllMeasurements();
+        Page<MeasurementDTO> result = measurementService.getAllMeasurements(pageable);
 
-        assertThat(result).hasSize(1);
-        MeasurementDTO resultDto = result.get(0);
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        MeasurementDTO resultDto = result.getContent().get(0);
         assertThat(resultDto.getValue()).isEqualTo(10.0);
         assertThat(resultDto.getRaining()).isFalse();
         assertThat(resultDto.getSensorName()).isEqualTo("MySensor-1");

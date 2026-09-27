@@ -95,7 +95,9 @@ Interactive documentation (Swagger UI) is available once the backend is running 
   Adds a new measurement
 
 - `GET /measurements`  
-  Returns all stored measurements
+  Returns a page of stored measurements, sorted by `measuredAt` descending by default.
+  Supports standard Spring Data pagination query params: `page`, `size`, `sort`
+  (e.g. `GET /measurements?page=0&size=10&sort=value,desc`)
 
 - `GET /measurements/rainyDaysCount`  
   Returns number of rainy days

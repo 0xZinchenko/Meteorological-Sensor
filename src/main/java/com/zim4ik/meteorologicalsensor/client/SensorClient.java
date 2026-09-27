@@ -1,5 +1,6 @@
 package com.zim4ik.meteorologicalsensor.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zim4ik.meteorologicalsensor.dto.MeasurementDTO;
 import com.zim4ik.meteorologicalsensor.dto.SensorDTO;
 import org.knowm.xchart.SwingWrapper;
@@ -69,15 +70,16 @@ public class SensorClient {
         System.out.println("Failed: " + failedRequests);
         System.out.println("Success rate: " + (successfulRequests * 100.0 / TOTAL_REQUESTS) + "%");
 
-        // GET /measurements
+        // GET /measurements (paginated; request a single page large enough to cover TOTAL_REQUESTS)
         try {
-            ResponseEntity<List<MeasurementDTO>> response = restTemplate.exchange(
-                    BASE_URL + GET_MEASUREMENTS_ENDPOINT,
+            ResponseEntity<MeasurementPage> response = restTemplate.exchange(
+                    BASE_URL + GET_MEASUREMENTS_ENDPOINT + "?size=" + TOTAL_REQUESTS,
                     HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<MeasurementDTO>>() {}
+                    new ParameterizedTypeReference<MeasurementPage>() {}
             );
-            List<MeasurementDTO> measurements = response.getBody();
+            MeasurementPage page = response.getBody();
+            List<MeasurementDTO> measurements = page != null ? page.getContent() : null;
             System.out.println("Measurements received: " + (measurements != null ? measurements.size() : 0));
 
             if (measurements != null && !measurements.isEmpty()) {
@@ -103,5 +105,18 @@ public class SensorClient {
             System.out.println("Error fetching measurements: " + e.getMessage());
         }
 
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private static class MeasurementPage {
+        private List<MeasurementDTO> content;
+
+        public List<MeasurementDTO> getContent() {
+            return content;
+        }
+
+        public void setContent(List<MeasurementDTO> content) {
+            this.content = content;
+        }
     }
 }

@@ -8,11 +8,10 @@ import com.zim4ik.meteorologicalsensor.repository.MeasurementRepository;
 import com.zim4ik.meteorologicalsensor.repository.SensorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
@@ -45,20 +44,17 @@ public class MeasurementService {
         log.debug("Measurement recorded for sensor '{}': value={}, raining={}", dto.getSensorName(), dto.getValue(), dto.getRaining());
     }
 
-    public List<MeasurementDTO> getAllMeasurements() {
-        List<Measurement> measurements = measurementRepository.findAll();
+    public Page<MeasurementDTO> getAllMeasurements(Pageable pageable) {
+        return measurementRepository.findAll(pageable).map(this::toDto);
+    }
 
-        List<MeasurementDTO> dto = new ArrayList<>();
-
-        for (Measurement m : measurements) {
-            MeasurementDTO measurementDTO = new MeasurementDTO();
-            measurementDTO.setValue(m.getValue());
-            measurementDTO.setRaining(m.getRaining());
-            measurementDTO.setSensorName(m.getSensor().getName());
-            measurementDTO.setMeasuredAt(m.getMeasuredAt());
-            dto.add(measurementDTO);
-        }
-        return dto;
+    private MeasurementDTO toDto(Measurement m) {
+        MeasurementDTO measurementDTO = new MeasurementDTO();
+        measurementDTO.setValue(m.getValue());
+        measurementDTO.setRaining(m.getRaining());
+        measurementDTO.setSensorName(m.getSensor().getName());
+        measurementDTO.setMeasuredAt(m.getMeasuredAt());
+        return measurementDTO;
     }
 
 
