@@ -3,6 +3,8 @@ package com.zim4ik.meteorologicalsensor.service;
 import com.zim4ik.meteorologicalsensor.dto.SensorDTO;
 import com.zim4ik.meteorologicalsensor.models.Sensor;
 import com.zim4ik.meteorologicalsensor.repository.SensorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,8 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class SensorService {
+
+    private static final Logger log = LoggerFactory.getLogger(SensorService.class);
 
     private final SensorRepository sensorRepository;
 
@@ -23,11 +27,12 @@ public class SensorService {
     public void registerSensor(SensorDTO dto) {
         Optional<Sensor> sensorOptional = sensorRepository.findByName(dto.getName());
         if (sensorOptional.isPresent()) {
+            log.warn("Sensor registration rejected: name '{}' already exists", dto.getName());
             throw new IllegalArgumentException("Сенсор с именем %s уже существует".formatted(dto.getName()));
         }
         Sensor sensor = new Sensor();
         sensor.setName(dto.getName());
         sensorRepository.save(sensor);
-
+        log.info("Sensor '{}' registered", dto.getName());
     }
 }

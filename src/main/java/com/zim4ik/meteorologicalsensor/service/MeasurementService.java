@@ -6,6 +6,8 @@ import com.zim4ik.meteorologicalsensor.models.Measurement;
 import com.zim4ik.meteorologicalsensor.models.Sensor;
 import com.zim4ik.meteorologicalsensor.repository.MeasurementRepository;
 import com.zim4ik.meteorologicalsensor.repository.SensorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class MeasurementService {
+
+    private static final Logger log = LoggerFactory.getLogger(MeasurementService.class);
 
     private final SensorRepository sensorRepository;
     private final MeasurementRepository measurementRepository;
@@ -27,14 +31,18 @@ public class MeasurementService {
 
     @Transactional
     public void addMeasurement(MeasurementDTO dto) {
-        Sensor sensor = sensorRepository.findByName(dto.getSensorName()).orElseThrow(() -> new IllegalArgumentException("Сенсор с именем %s не существует".formatted(dto.getSensorName())));
+        Sensor sensor = sensorRepository.findByName(dto.getSensorName())
+                .orElseThrow(() -> {
+                    log.warn("Measurement rejected: sensor '{}' does not exist", dto.getSensorName());
+                    return new IllegalArgumentException("Сенсор с именем %s не существует".formatted(dto.getSensorName()));
+                });
 
         Measurement measurement = new Measurement();
         measurement.setValue(dto.getValue());
         measurement.setRaining(dto.getRaining());
         measurement.setSensor(sensor);
         measurementRepository.save(measurement);
-
+        log.debug("Measurement recorded for sensor '{}': value={}, raining={}", dto.getSensorName(), dto.getValue(), dto.getRaining());
     }
 
     public List<MeasurementDTO> getAllMeasurements() {
