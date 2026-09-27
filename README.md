@@ -128,3 +128,7 @@ Database connection settings can be overridden via environment variables (defaul
 - sensor_id (FK)
 
 ---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
